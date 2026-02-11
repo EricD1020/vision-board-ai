@@ -2,13 +2,17 @@ import { useState } from "react";
 import { DragDropContext, type DropResult } from "@hello-pangea/dnd";
 import { KanbanColumn } from "./KanbanColumn";
 import { AddTaskDialog } from "./AddTaskDialog";
-import { useTasks } from "@/hooks/useTasks";
+import type { useTasks } from "@/hooks/useTasks";
 import { Loader2 } from "lucide-react";
 
 const COLUMNS = ["todo", "in_progress"] as const;
 
-export function KanbanBoard() {
-  const { tasks, loading, addTask, deleteTask, moveTask } = useTasks();
+interface KanbanBoardProps {
+  taskHook: ReturnType<typeof useTasks>;
+}
+
+export function KanbanBoard({ taskHook }: KanbanBoardProps) {
+  const { tasks, loading, addTask, deleteTask, moveTask } = taskHook;
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogStatus, setDialogStatus] = useState<string>("todo");
 

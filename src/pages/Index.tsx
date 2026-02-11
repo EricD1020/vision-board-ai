@@ -2,12 +2,14 @@ import { useAuth } from "@/hooks/useAuth";
 import { AppSidebar } from "@/components/AppSidebar";
 import { KanbanBoard } from "@/components/KanbanBoard";
 import { ChatBubble } from "@/components/ChatBubble";
+import { useTasks } from "@/hooks/useTasks";
 import { Search } from "lucide-react";
 import Auth from "./Auth";
 import { Loader2 } from "lucide-react";
 
 const Index = () => {
   const { user, loading } = useAuth();
+  const taskHook = useTasks();
 
   if (loading) {
     return (
@@ -24,7 +26,6 @@ const Index = () => {
       <AppSidebar />
 
       <main className="flex-1 flex flex-col min-h-screen overflow-hidden">
-        {/* Header */}
         <header className="px-8 py-6 border-b flex items-center justify-between shrink-0">
           <div>
             <h1 className="text-2xl font-display font-bold text-foreground">Kanban Board</h1>
@@ -44,13 +45,12 @@ const Index = () => {
           </div>
         </header>
 
-        {/* Board */}
         <div className="flex-1 overflow-auto p-8">
-          <KanbanBoard />
+          <KanbanBoard taskHook={taskHook} />
         </div>
       </main>
 
-      <ChatBubble />
+      <ChatBubble onTasksChanged={taskHook.fetchTasks} />
     </div>
   );
 };
